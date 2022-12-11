@@ -51,9 +51,11 @@ io.sockets.on('connection',(socket)=>{
 
     socket.on('chat message', function(data){ // Send the message to that player
 		console.log(`chat message:${data.id} ${data.message}`);
-		io.to(data.id).emit('chat message', { id: socket.id, message: data.message });
+		io.to(data.id).emit('chat message', { id: socket.id, message: data.message,playername : data.playername });
 	})
 })
+
+
 
 
 setInterval(function(){

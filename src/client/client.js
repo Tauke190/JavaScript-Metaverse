@@ -1,6 +1,8 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader'
+import {FontLoader} from 'three/examples/jsm/loaders/FontLoader'
+import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js';
 import {JoyStick, toon3D} from './toon3D'
 
 
@@ -27,6 +29,8 @@ class Game
         this.assetspath = '../assets/'
         this.clock = new THREE.Clock();
 
+
+        this.textmesh;
         this.remotePlayers = [];
         this.intializingPlayers = [];
         this.remoteColliders = [];
@@ -109,23 +113,12 @@ class Game
 
   
 
-       
-        // this.controls = new OrbitControls(this.camera,this.renderer.domElement);
-        // this.controls.target.set(0,150,0);
-        // this.controls.update();
-
+    
         //model
         const loader = new FBXLoader();
-
-
         this.player = new PlayerLocal(this);
-
-
-    
         game.loadnextAnim(loader);    
         game.loadEnvironment(loader);
-
-
         this.speechBubble = new SpeechBubble(this, "", 150);
         
 	     this.speechBubble.mesh.position.set(0, 350, 0);
@@ -177,8 +170,7 @@ class Game
 			] );
 
 			game.scene.background = textureCube;
-			
-			game.loadNextAnim(loader);
+		
 		})
 	}
 	
@@ -256,8 +248,6 @@ class Game
         const remoteColliders = [];
 
 
-    
-        console.log(this.remoteData);
 
         this.remoteData.forEach(function(data){
             if(game.player.id != data.id) // We do for all remoteplayers except us
@@ -283,13 +273,11 @@ class Game
                     if(rplayer === undefined) // If player is not in remoteplayerslist or intialziing players list
                     {
                         game.intializingPlayers.push(new Player(game,data));
-                        console.log(data);
                     }
                     else
                     {
                         remotePlayers.push(rplayer);
                         remoteColliders.push(rplayer.collider);
-                        console.log(remotePlayers);
                     }
                 }
             }
@@ -363,6 +351,34 @@ class Game
 		this.activeCamera = this.player.cameras.back;	
 	}
 
+
+    loadFonts()
+    {
+
+    
+      const loader = new FontLoader();
+      loader.load( 'fonts/helvetiker_regular.typeface.json', function ( font ) {
+      
+        const textgeo = new TextGeometry( 'Hello three.js!', {
+              font: font,
+              size: 80,
+              height: 5,
+              curveSegments: 12,
+              bevelEnabled: true,
+              bevelThickness: 10,
+              bevelSize: 8,
+              bevelOffset: 0,
+              bevelSegments: 5
+          } );
+
+          const planeMaterial = new THREE.MeshBasicMaterial()
+          const textMesh = new THREE.Mesh(textgeo,planeMaterial);
+      } );
+
+    
+    }
+
+  
     
 
    
@@ -530,8 +546,9 @@ class Player{
 		}
 
 
+        this.playername = "Avinash";
 
-        this.model = "Robot1";
+        this.model = model;
         this.color = "Black";
         this.game = game;
         this.animations = this.game.animations; // Animations are same of all player
@@ -558,15 +575,20 @@ class Player{
 
             const textureLoader = new THREE.TextureLoader();
             console.log(player.model);
+
+
         
-            // textureLoader.load('Textures/'+player.model+'.png', function(texture){
-            //     console.log("Why is this taking so long");
-            //     object.traverse( function ( child ) {
-            //         if ( child.isMesh ){
-            //             child.material.map = texture;
-            //         }
-            //     } );
-            // });
+                // textureLoader.load('Textures/'+player.model+'.png', function(texture){
+                //     console.log("Why is this taking so long");
+                //     object.traverse( function ( child ) {
+                //         if ( child.isMesh ){
+                //             child.material.map = texture;
+                //         }
+                //     } );
+                // });
+            
+        
+          
 
     
         player.object = new THREE.Object3D();
@@ -613,6 +635,8 @@ class Player{
      });
   }
 
+
+ 
   randomInRange(min, max) {  
     return Math.floor(Math.random() * (max - min) + min); 
 } 
@@ -728,7 +752,7 @@ class PlayerLocal extends Player{
     
 
 
-        socket.on('chat message', function(data)
+    socket.on('chat message', function(data)
     {
         document.getElementById('chat').style.bottom = '0px';
         const player = game.getRemotePlayerById(data.id);
@@ -736,15 +760,15 @@ class PlayerLocal extends Player{
         game.chatSocketId = player.id;
         game.activeCamera = game.player.cameras.chat;
 
-        console.log(data.message);
-        game.speechBubble.update(data.message);
+        game.speechBubble.update(data.playername + " : "+data.message);
     });
     
     $('#msg-form').submit(function(e){
-        socket.emit('chat message', { id:game.chatSocketId, message:$('#m').val() });
+        socket.emit('chat message', { id:game.chatSocketId, message: $('#m').val() , playername : $('#name').val()});
         $('#m').val('');
         return false;
     });
+
        this.socket = socket;
     }
 
@@ -920,12 +944,6 @@ class PlayerLocal extends Player{
        this.updateSocket();
     }
 }
-
-
-const game = new Game();
-
-
-
 function Keyup(e) {
    // console.log(UP,DOWN,LEFT,FIRE);
     if (e.key !== undefined) {
@@ -948,10 +966,9 @@ function Keyup(e) {
     }
 }
 
-function KeyDown(e) {
+let game;
 
-  
-  
+function KeyDown(e) {  
   //  console.log(UP,DOWN,LEFT,RIGHT,FIRE);
     const game = this;
     if (e.key !== undefined) {
@@ -976,4 +993,22 @@ function KeyDown(e) {
 }
 document.addEventListener('keydown',KeyDown);
 document.addEventListener('keyup',Keyup);
+
+
+$('#name-form').submit(function(e){
+  
+    const Intro = document.getElementById('Intro');
+    Intro.style.top = '-120px';
+
+   setTimeout(function()
+   {
+    game = new Game();
+   },1000)
+   return false;
+});
+
+
+
+
+
 
