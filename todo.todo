@@ -1,0 +1,23 @@
+✔ Setup node.js project @done(22-11-26 17:55)
+✔ Setup three.js locally @done(22-12-10 14:33)
+✔ Setup a 3D scene in three.js @done(22-12-10 14:33)
+✔ Add animated character to three.js @done(22-12-10 14:33)
+✔ Add contols and movment to the character @done(22-12-10 14:33)
+✔ Set up the socket connection in the project @done(22-12-10 14:33)
+✔ Sync the player movement and player animation with socket @done(22-12-10 14:33)
+✔ Add Collision Between the multplayer players @done(22-12-10 14:34)
+✔ Added Chat Functionality @done(22-12-11 15:25)
+
+
+
+✔ Fix the animations @done(22-12-11 15:45)
+✔ Load all the players models with textures on all clients @done(22-12-11 22:18)
+✔ When someonetexts you make them look in that direction @done(22-12-11 22:18)
+☐ Add names of the player
+☐ Add 3D Environment
+
+
+
+
+
+
