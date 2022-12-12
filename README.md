@@ -130,7 +130,7 @@ The three JS renders lights , plane , grid , cameras and intializes the renderer
 ### Step 2 : Intializing the player ###
 
 The Player class holds all the functionality of the player like moving around and controlling the animation of the player. It loads the 3D model designated to that player using addons of threeJS called FBXloader(). It also loads all the animation for that player and stores it into the anims array
-It also loads the texture for that model and applys the UV maps to the 3D model.It checks if the player is local or not , it not it pushes in the remoteplayer arrays to be sent to the server and all clients.It also control the animation of the player.
+It also loads the texture for that model and applys the UV maps to the 3D model.It checks if the player is local or not , if not it pushes in the remoteplayer arrays to be sent to the server and all clients .It also control the animation of the player.
 
 ```
 class Player{
@@ -227,7 +227,56 @@ class Player{
 
 
 ### Step 3 : Collision Detection ###
+
+Collision detection is done using raycaster in three.js. A ray is shot from the forward vector of the player and it returns all the colliders that the ray intersects with. It returns the colliders that the ray interesects with and if the player is in certain range within that object, collision is detected and player cannot move forward
+
+
+```
+const dir = new THREE.Vector3();
+const pos = this.object.position.clone();
+pos.y+=60;
+this.object.getWorldDirection(dir);
+let raycaster = new THREE.Raycaster(pos,dir);
+let blocked = false;
+const colliders = game.colliders;
+game.remoteColliders.forEach((remoteCollider)=>{
+    colliders.push(remoteCollider);
+});
+
+if(colliders !== undefined)
+{
+    const intersect = raycaster.intersectObjects(colliders)
+    if(intersect.length > 0)
+    {
+        if(intersect[0].distance < 50)
+        {
+            blocked = true;
+        }
+    }
+}
+```
+
 ### Step 4 : Socket Integration ###
+Socket.io is used to send data back to server and server emits the data of the remoteplayers to all the clients. The local player sends its positional information , rotational information and model info.
+
+```
+    updateSocket()
+    {
+        if(this.socket !== undefined)
+        {
+            this.socket.emit('update',{
+                x : this.object.position.x,
+                y : this.object.position.y,
+                z : this.object.position.z,
+                h : this.object.rotation.y,
+                pb : this.object.rotation.x,
+                action: this.action
+            })
+        }
+    }
+```
+
+
 ### Step 5 : Chat functionality ###
 ### Step 6 : Server Side ###
 
