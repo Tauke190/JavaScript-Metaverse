@@ -231,6 +231,8 @@ class Player{
 
 Collision detection is done using raycaster in three.js. A ray is shot from the forward vector of the player and it returns all the colliders that the ray intersects with. It returns the colliders that the ray interesects with and if the player is in certain range within that object, collision is detected and player cannot move forward
 
+![](https://github.com/Tauke190/JavaScript-Metaverse/blob/master/collider.png)
+
 
 ```
 const dir = new THREE.Vector3();
