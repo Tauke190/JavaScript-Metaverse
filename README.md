@@ -27,7 +27,7 @@ I aim to create a 3D Multplayer game with THREE.js and socket.io.It is 3D multip
 
 ### Step 1 : Setting up the scene ###
 
-The three JS renders lights , plane , grid , cameras and intializes the renderer in the browser. The constructor also intializes the remotePlayers array , remoteColliders array , animation arrays which will be used in the game.It also adds oneventlistener in this phase.
+The three JS renders lights , plane , grid , cameras and intializes the renderer in the browser. The constructor also intializes the remotePlayers array , remoteColliders array , animation arrays which will be used in the game. It also adds Oneventlistener for mouse click in this phase.
 ```class Game
 {
     constructor()
