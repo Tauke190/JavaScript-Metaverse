@@ -132,7 +132,9 @@ I aim to create a 3D Multplayer game with THREE.js and socket.io.It is 3D multip
 		
 		window.addEventListener( 'resize', () => game.onWindowResize(), false );
 
-    }````
+    }
+    
+ ```
 
 
 
