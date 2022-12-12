@@ -24,10 +24,11 @@ I aim to create a 3D Multplayer game with THREE.js and socket.io.It is 3D multip
 
 ## How it works ? ##
 
-
 ### Step 1 : Setting up the scene ###
 
 The three JS renders lights , plane , grid , cameras and intializes the renderer in the browser. The constructor also intializes the remotePlayers array , remoteColliders array , animation arrays which will be used in the game. It also adds Oneventlistener for mouse click in this phase.
+
+[](https://github.com/Tauke190/JavaScript-Metaverse/blob/master/floor.png)
 ```class Game
 {
     constructor()
