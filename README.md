@@ -282,7 +282,11 @@ Socket.io is used to send data back to server and server emits the data of the r
 
 ### Step 5 : Chat functionality ###
 
+
+### Client Side ###
 I have also programmed a script to generate the speech bubble that floats above the head of the player when someone initiates the conversation.It only sends that chat message to the person he/she has clicked.
+
+![](https://github.com/Tauke190/JavaScript-Metaverse/blob/master/chat1.png)
 ```
 socket.on('chat message', function(data)
 { // Send the message to that player
@@ -290,6 +294,11 @@ socket.on('chat message', function(data)
 	io.to(data.id).emit('chat message', { id: socket.id, message: data.message,playername : data.playername });
 })
 ```
+
+
+
+### Server Side ###
+![](https://github.com/Tauke190/JavaScript-Metaverse/blob/master/chat2.png)
 ```
  socket.on('chat message', function(data)
     {
