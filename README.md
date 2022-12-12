@@ -315,7 +315,7 @@ socket.on('chat message', function(data)
 ### Step 6 : Server Side ###
 
 
-The server trasmits the remoteData which contains information of all the players to all the clients at every 40 millisecond.So the rate of transmission is 25 times a second.Then client uses this data to update the position of the remote players in the game.
+The server trasmits the remoteData which contains information of all the players to all the clients every 40 millisecond.So the rate of transmission is 25 times a second.Then client uses this data to update the position of the remote players in the game.
 
 
 setInterval(function(){
@@ -375,4 +375,5 @@ setInterval(function(){
 
 
 ## Final Result
+
 
