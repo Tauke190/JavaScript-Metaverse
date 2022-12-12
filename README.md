@@ -123,12 +123,106 @@ The three JS renders lights , plane , grid , cameras and intializes the renderer
 		}
 		
 		window.addEventListener( 'resize', () => game.onWindowResize(), false );
-
     }
     
  ```
 
 ### Step 2 : Intializing the player ###
+
+The Player class holds all the functionality of the player like moving around and controlling the animation of the player. It loads the 3D model designated to that player using addons of threeJS called FBXloader(). It also loads all the animation for that player and stores it into the anims array
+It also loads the texture for that model and applys the UV maps to the 3D model.It checks if the player is local or not , it not it pushes in the remoteplayer arrays to be sent to the server and all clients.It also control the animation of the player.
+
+```
+class Player{
+
+    constructor(game,options)
+    {
+      this.local = true;
+      this.SPEED = 300;
+      let model , color;
+      const colours = ['Black', 'Brown', 'White'];
+      color = colours[Math.floor(Math.random()*colours.length)];
+
+      if (options===undefined){
+        const people = ['Robot1', 'Robot2'];
+        model = people[Math.floor(Math.random()*people.length)];
+      }
+      else if (typeof options =='object'){
+        this.local = false;
+        this.options = options;
+        this.id = options.id;
+        model = options.model;
+        color = options.colour;
+      }
+      else
+      {
+        model = options;
+      }
+      this.playername = "Avinash";
+      this.model = model;
+      this.color = "Black";
+      this.game = game;
+      this.animations = this.game.animations; // Animations are same of all player
+      this.ballons = [];
+      this.player_direction = new THREE.Vector3();
+
+      const loader = new FBXLoader();
+      const player = this;
+
+      loader.load('Models/'+this.model+'.fbx' , function(object){ 
+          object.mixer = new THREE.AnimationMixer(object);
+          player.mixer = object.mixer;
+          player.root = object.mixer.getRoot();
+          object.traverse(function(child){
+              if(child.isMesh){
+                 child.material.map = null;
+                 child.castShadow = true;
+                 child.recieveShadow = true;
+              }
+          }));
+
+      player.object = new THREE.Object3D();
+      player.object.position.set(Math.random() * 1000,0,Math.random() * -1000);
+      player.object.rotation.set(0,2,0);
+      player.object.add(object); // Adds the 3D model as the child of the player transform object
+
+
+      if(player.deleted === undefined){
+          game.scene.add(player.object);
+      }
+      if(player.local)
+      {
+          game.createCameras();
+          game.animations.Idle = object.animations[0];
+           if(player.initSocket !== undefined)
+           {
+              player.initSocket(); // initItSocket in is PlayerLocal Class
+           }
+      }
+      else
+      {
+          const geometry = new THREE.BoxGeometry(100,300,100);
+          const material = new THREE.MeshBasicMaterial({visible:false});
+          const box = new THREE.Mesh(geometry,material);
+          box.name = "Collider"; // Player Collider
+          box.position.set(0,150,0);
+          player.object.add(box);
+          player.collider = box;
+          player.object.userData.id = player.id;
+          player.object.userData.remotePlayer = true;
+          //Remove this player from Initializingplayers array
+          const players = game.intializingPlayers.splice(game.intializingPlayers.indexOf(this),1);
+          game.remotePlayers.push(players[0]);
+      }
+      if(game.animations.Idle !== undefined)
+      {
+           player.action = "Idle"; // Assigning this action to the player;
+      } 
+
+   });
+  }
+```
+
 
 
 
