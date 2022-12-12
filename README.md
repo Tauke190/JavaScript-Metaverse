@@ -22,20 +22,12 @@ I aim to create a 3D Multplayer game with THREE.js and socket.io.It is 3D multip
 4. Standard Arrow keys will be used to move and rotate the player in the game
 
 
-### How it works ? ###
+## How it works ? ##
 
 
-## Step 1 : Setting up the scene ##
+### Step 1 : Setting up the scene ###
 
-## Step 2 : Intializing the player ##
-
-
-
-## Step 3 : Collision Detection ##
-## Step 4 : Socket Integration ##
-## Step 5 : Chat functionality ##
-## Step 6 : Server Side ##
-
+The three JS renders lights , plane , grid , cameras and intializes the renderer in the browser. The constructor also intializes the remotePlayers array , remoteColliders array , animation arrays which will be used in the game.It also adds oneventlistener in this phase.
 ```class Game
 {
     constructor()
@@ -135,6 +127,17 @@ I aim to create a 3D Multplayer game with THREE.js and socket.io.It is 3D multip
     }
     
  ```
+
+### Step 2 : Intializing the player ###
+
+
+
+### Step 3 : Collision Detection ###
+### Step 4 : Socket Integration ###
+### Step 5 : Chat functionality ###
+### Step 6 : Server Side ###
+
+
 
 
 
