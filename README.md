@@ -347,7 +347,7 @@ setInterval(function(){
 3. Syncing the players across all the clients was a challenging task
 
 
-## 25-Sept (Next Steps)
+## Next Steps
 
 1. Integrating voice chat in the game
 2. Adding more social activities so that players can collaborate or compete with each other in the virtual world
