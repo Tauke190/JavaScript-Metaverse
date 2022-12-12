@@ -16,7 +16,7 @@ I aim to create a 3D Multplayer game with THREE.js and socket.io.It is 3D multip
 4. I plan to use webpack to bundle all the files into a single js file which is used by the index.html
 
 ### Design Decision ###
-1. I will be using 3D models and 3D animations from ![Mixamo](https://www.mixamo.com/#/)
+1. I will be using 3D models and 3D animations from [Mixamo](https://www.mixamo.com/#/)
 2. I will be using the 3D environment from the asset store
 3. I will keep the UI very minimalistic and simple
 4. Standard Arrow keys will be used to move and rotate the player in the game
