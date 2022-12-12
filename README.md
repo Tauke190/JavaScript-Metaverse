@@ -1,58 +1,153 @@
-# Weather App #
+# Javascript Metaverse #
 ### [Working Link](https://metaversescript.glitch.me)
 
-## Production ##
-
 ### Idea ###
-I aim to create a very simple weather web app that can display the image of the city and the weather when the user queries upon it. I plan to make a very minimalistic design that provides essential information regarding weather like temperature,humidity,windspeed etc. I will be using splash API for getting images of the city and I will be using openweather API to get the information of the weather by city name. The user can enter a valid city name and get the essential information about the current weather in that city. I am planning to expand my project as well to a map. So you can pinpoint the location on the map to get the weather data.The user interaction in the app is to enter the name of the valid city to retrieve the information about the weather
+I aim to create a 3D Multplayer game with THREE.js and socket.io.It is 3D multiplayer game where you can meet and talk to new player in the virtual world. You can go up to anyone and initiate the conversation simply by clicking on them and chat!.The idea is to engage in social activities together while immersing yourself in the virtual environment.
 
-### Wireframe ###
-![WireFrame](https://raw.githubusercontent.com/Tauke190/Connections-Lab/master/Project%201%20-%20Weather%20App/Wireframe.png)
-
-
-### Motivation && Inspiration
-1. What if I have trouble remembering names?
-2. What if I need to know the basic weather of a place quicky?
-3. The power of D3.js to draw SVG
-4. Love for geography
-![Intro](https://github.com/Tauke190/Connections-Lab/blob/master/Project%201%20-%20Weather%20App/Screen%20Shot%202022-09-29%20at%2011.10.47%20PM.png)
-
+### Motivation && Inspiration ###
+1. To test the limits of socket.io !
+2. Creation of 3D game
+3. A place to socialize and relax
 
 ### Technical Decision ###
-1. I am exploring API which provides relevant weather data
-2. I plan to use D3.js library because of its flexibility to draw SVG files from JSON data
+1. I will be using THREE.js to render the 3D content in the browser
+2. I plan to use socket.io for the multipayer connectivity
 3. I plan to develop the entire project using object oriented approach by making objects and encapsulating it with functions
+4. I plan to use webpack to bundle all the files into a single js file which is used by the index.html
 
 ### Design Decision ###
-1. I plan to move forward with a modern minimalistic design for the website
-2. The user can hover and click in the world map which will pop up with a simple animation and display weather data for that location
-3. Since it takes alot of time to download the image , I am planning to make some sort of interactive game when the image loads for the new place
+1. I will be using 3D models and 3D animations from ![Mixamo](https://www.mixamo.com/#/)
+2. I will be using the 3D environment from the asset store
+3. I will keep the UI very minimalistic and simple
+4. Standard Arrow keys will be used to move and rotate the player in the game
 
- ## User Interaction ##
- <img width="500" alt="Screen Shot 2022-09-19 at 12 12 12 AM" src="https://user-images.githubusercontent.com/31856059/190926506-9459bdcb-d03b-4fc6-8881-afb06fde4d21.png">
- 
- Type the name of the valid city/country to see its weather data
 
-![4500px-A_large_blank_world_map_with_oceans_marked_in_blue svg](https://user-images.githubusercontent.com/31856059/190926490-69cff088-65f5-4c63-9855-7edf64bd52ac.png)
+### How it works ? ###
+
+
+## Step 1 : Setting up the scene ##
+
+## Step 2 : Intializing the player ##
+
+
+
+## Step 3 : Collision Detection ##
+## Step 4 : Socket Integration ##
+## Step 5 : Chat functionality ##
+## Step 6 : Server Side ##
+
+```class Game
+{
+    constructor()
+    {
+        this.container;  // HTML Container
+        this.player = {};
+        this.animations = {}; // The animations are saved into this object
+        this.stats;
+        this.controls;
+        this.camera;
+        this.scene;
+        this.renderer;
+        this.assetspath = '../assets/'
+        this.clock = new THREE.Clock();
+        this.textmesh;
+        this.remotePlayers = [];
+        this.intializingPlayers = [];
+        this.remoteColliders = [];
+        this.remoteData = [];
+        const game = this;
+        this.anims = ['Running','Walking Left Turn','Walking Right Turn','TurnIdle'];
+        this.container = document.createElement('div');
+        this.container.style.height = '100%';
+        document.body.appendChild(this.container);
+        window.onerror = function(error)
+        {
+            console.error(JSON.stringify(error));
+        }
+        game.init();
+
+    }
+
+    init() // Initialization of the scene
+    {
+       
+        //Cameras
+        this.camera = new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,0.1,200000)
+        this.camera.position.set(112,100,400);
+        //Scenes
+        this.scene = new THREE.Scene();
+        this.scene.background = new THREE.Color(0xa0a0a0);
+        // this.scene.fog = new THREE.Fog(0xa0a0a0,500,1700);
+        
+        // Lights
+        const ambient = new THREE.AmbientLight(0x707070);
+        let light = new THREE.HemisphereLight(0xffffff,0x444444);
+        light.position.set(0,200,0);
+        this.scene.add(light);
+        light = new THREE.DirectionalLight(0xffffff);
+        light.position.set(0,200,100);
+        light.castShadow = true;
+        light.shadow.camera.top = 180;
+        light.shadow.camera.bottom = -100;
+        light.shadow.camera.left = -120;
+        light.shadow.camera.right = 120;
+        this.scene.add(light);
+        this.scene.add(ambient);
+        
+        const game = this;
+        //Ground
+        var mesh =  new THREE.Mesh(new THREE.PlaneGeometry(4000,4000), new THREE.MeshPhongMaterial({color : 0x999999, depthWrite : false}))
+        mesh.rotation.x = - Math.PI/2;
+        mesh.recieveShadow = true;
+        this.scene.add(mesh);
+
+        //Grid
+        var grid = new THREE.GridHelper(4000,80,0x000000,0x000000);
+        grid.material.opacity = 0.2;
+        grid.material.transparent = true;
+        this.scene.add(grid);
+      
+
+        //Renderer
+        this.renderer = new THREE.WebGLRenderer({antialias:true});
+        this.renderer.setPixelRatio(window.devicePixelRatio);
+        this.renderer.setSize(window.innerWidth,window.innerHeight);
+        this.renderer.shadowMap.enabled = true;
+        document.body.append(this.renderer.domElement);
+
+        //Model
+        const loader = new FBXLoader();
+        this.player = new PlayerLocal(this);
+        game.loadnextAnim(loader);    
+         game.loadEnvironment(loader);
+        this.speechBubble = new SpeechBubble(this, "", 150);
+        
+	     this.speechBubble.mesh.position.set(0, 350, 0);
+
+        if ('ontouchstart' in window){
+			window.addEventListener( 'touchdown', (event) => game.onMouseDown(event), false );
+		}else{
+			window.addEventListener( 'mousedown', (event) => game.onMouseDown(event), false );	
+		}
+		
+		window.addEventListener( 'resize', () => game.onWindowResize(), false );
+
+    }````
+
+
+
+
 
 
 
 ## WorkFlow
 ![](https://github.com/Tauke190/Connections-Lab/blob/master/Project%201%20-%20Weather%20App/Screen%20Shot%202022-09-29%20at%2011.11.13%20PM.png)
-
 Pinpoint the location on the map to reveal its weather data
 
 ## Key Challenges
-
 1. Drawing the world map piece by piece as a HTML element because it has to be hoverable and give the right information. Uploading a Image cannot work.
 2. Learning D3.js which is a java script library for data visualization
 3. Understanding the Object oriented method in javascript 
-<img width="751" alt="Screen Shot 2022-09-19 at 12 17 58 AM" src="https://user-images.githubusercontent.com/31856059/190926685-3a635755-ea65-48f7-bd8e-09319b6c2beb.png">
-4. Setting the background of SVG as a video but not the body background
-
- ![Key Challenges 1](https://github.com/Tauke190/Connections-Lab/blob/master/Project%201%20-%20Weather%20App/Challenge%20D3.png)
- 
- ![Key Challenges 2](https://raw.githubusercontent.com/Tauke190/Connections-Lab/master/Project%201%20-%20Weather%20App/Screen%20Shot%202022-09-29%20at%209.48.31%20AM.png)
 
 
 ## 25-Sept (Next Steps)
