@@ -303,44 +303,64 @@ socket.on('chat message', function(data)
 ### Step 6 : Server Side ###
 
 
+The server trasmits the remoteData which contains information of all the players to all the clients at every 40 millisecond.So the rate of transmission is 25 times a second.Then client uses this data to update the position of the remote players in the game.
 
 
+setInterval(function(){
+	const nsp = io.of('/');
+    let pack = [];
 
+    // console.log();
+    io.fetchSockets()
+    .then((sockets) => 
+    {
+    sockets.forEach((socket) => 
+        {
+            if (socket.userData.model!==undefined){
+                //  console.log(socket.id);
+                pack.push({
+                    id: socket.id,
+                    model: socket.userData.model,
+                    colour: socket.userData.colour,
+                    x: socket.userData.x,
+                    y: socket.userData.y,
+                    z: socket.userData.z,
+                    heading: socket.userData.heading,
+                    pb: socket.userData.pb,
+                    action: socket.userData.action
+                }); 
+               
+            }
+        })
+        if (pack.length>0) 
+        {
+            io.emit('remoteData', pack);
+        }
+    })
+  
+}, 40); // 25 frames a second
 
-
-
-
-## WorkFlow
-![](https://github.com/Tauke190/Connections-Lab/blob/master/Project%201%20-%20Weather%20App/Screen%20Shot%202022-09-29%20at%2011.11.13%20PM.png)
-Pinpoint the location on the map to reveal its weather data
 
 ## Key Challenges
-1. Drawing the world map piece by piece as a HTML element because it has to be hoverable and give the right information. Uploading a Image cannot work.
-2. Learning D3.js which is a java script library for data visualization
-3. Understanding the Object oriented method in javascript 
+1. Loading 3D Models , animation , and applying textures to the 3D model was very tedious task compared to other game engines
+2. Making webpack work with the project and sucessfully bundling the files together
+3. Syncing the players across all the clients was a challenging task
 
 
 ## 25-Sept (Next Steps)
 
-1. Incorporating D3.js for drawing the SVG of the world map from the geographical co-ordinates encoded in JSON
-2. Incorporation p5.js for additional interactivity in the Web App
-3. Finding a better API that can supply updated and latest images of places of the world/city/country 
-4. Styling the elements better and addding animation in the website
-5. Adding a load screen for the images because it takes some time to download the images from the API , or adding a small game during the load time
+1. Integrating voice chat in the game
+2. Adding more social activities so that players can collaborate or compete with each other in the virtual world
+3. The ability to choose and customize their characters
 
 
-## 29-Sept (Next Steps)
-1. Zooming in Feature so you can see weather of specific cities
-2. Adding the past history of major weather events in that specific place
-3. Adding live clipart animation overlaying the map showing the weather of many places at once 
-4. Adding major landmarks of that place so that you can learn about that country as you browse through the weather
 
 ## References/Resources
-1. [Openweathermap API](https://openweathermap.org/api)
-2. [D3.js - JS library](https://openweathermap.org/api)
-3. [Splash Image API](https://unsplash.com/developers)
+1. [THREE JS](https://openweathermap.org/api)
+2. [Socket.io](https://socket.io/)
+3. [Mixamo - Animation](https://www.mixamo.com/)
+4.
 
 
 ## Final Result
-![Final Result](https://github.com/Tauke190/Connections-Lab/blob/master/Project%201%20-%20Weather%20App/Final.png)
 
