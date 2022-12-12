@@ -371,9 +371,9 @@ setInterval(function(){
 1. [THREE JS](https://openweathermap.org/api)
 2. [Socket.io](https://socket.io/)
 3. [Mixamo - Animation](https://www.mixamo.com/)
-4.
 
 
 ## Final Result
+![](https://github.com/Tauke190/JavaScript-Metaverse/blob/master/Intro.png)
 
 
