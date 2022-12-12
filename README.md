@@ -278,6 +278,28 @@ Socket.io is used to send data back to server and server emits the data of the r
 
 
 ### Step 5 : Chat functionality ###
+
+I have also programmed a script to generate the speech bubble that floats above the head of the player when someone initiates the conversation.It only sends that chat message to the person he/she has clicked.
+```
+socket.on('chat message', function(data)
+{ // Send the message to that player
+	console.log(`chat message:${data.id} ${data.message}`);
+	io.to(data.id).emit('chat message', { id: socket.id, message: data.message,playername : data.playername });
+})
+```
+```
+ socket.on('chat message', function(data)
+    {
+        document.getElementById('chat').style.bottom = '0px';
+        const player = game.getRemotePlayerById(data.id);
+        game.speechBubble.player = player;
+        game.chatSocketId = player.id;
+        game.activeCamera = game.player.cameras.chat;
+
+        game.speechBubble.update(data.playername + " : "+data.message);
+    });
+```
+
 ### Step 6 : Server Side ###
 
 
