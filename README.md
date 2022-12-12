@@ -1,16 +1,10 @@
 # Weather App #
-
-
-
-
-### [Working Link](https://avinashgyavali.com/Connections-Lab/Project%201%20-%20Weather%20App/)
+### [Working Link](https://metaversescript.glitch.me)
 
 ## Production ##
 
-
 ### Idea ###
 I aim to create a very simple weather web app that can display the image of the city and the weather when the user queries upon it. I plan to make a very minimalistic design that provides essential information regarding weather like temperature,humidity,windspeed etc. I will be using splash API for getting images of the city and I will be using openweather API to get the information of the weather by city name. The user can enter a valid city name and get the essential information about the current weather in that city. I am planning to expand my project as well to a map. So you can pinpoint the location on the map to get the weather data.The user interaction in the app is to enter the name of the valid city to retrieve the information about the weather
-
 
 ### Wireframe ###
 ![WireFrame](https://raw.githubusercontent.com/Tauke190/Connections-Lab/master/Project%201%20-%20Weather%20App/Wireframe.png)
